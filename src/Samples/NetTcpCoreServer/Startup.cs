@@ -15,7 +15,6 @@ namespace NetTcpCoreServer
     private const string hostUri = "net.tcp://localhost/service/Encrypted";
 
     #region private methods
-
     private static NetTcpBinding GetAndSetupTcpBinding()
     {
       NetTcpBinding tcpBinding = new NetTcpBinding();
@@ -39,11 +38,10 @@ namespace NetTcpCoreServer
 
     #endregion
 
+    #region public methods
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddServiceModelServices();
-      //services.AddSingleton<IServiceBehavior>(
-      //  CertificateHelper.GenerateCertificateEncryptedBehaviour());
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -66,6 +64,6 @@ namespace NetTcpCoreServer
             });
       });
     }
-
+    #endregion
   }
 }
