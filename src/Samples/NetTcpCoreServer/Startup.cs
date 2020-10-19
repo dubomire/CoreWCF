@@ -1,4 +1,5 @@
 ﻿using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using CoreWCF;
 using CoreWCF.Configuration;
 using CoreWCF.Description;
@@ -42,6 +43,8 @@ namespace NetTcpCoreServer
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddServiceModelServices();
+      //services.AddSingleton<IServiceBehavior>(CertificateHelper
+      //  .GenerateCertificateEncryptedBehaviour());
     }
 
     public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -55,12 +58,24 @@ namespace NetTcpCoreServer
           .AddServiceEndpoint<EchoService, IEchoService>(
             binding: tcpBinding,
             address: hostUri)
-          .ConfigureServiceHostBase<IEchoService>(
+          .ConfigureServiceHostBase<EchoService>(
             serviceHost =>
             {
-              serviceHost.Description.Behaviors.Add(
-                CertificateHelper
-                  .GenerateCertificateEncryptedBehaviour());
+              ServiceCredentials c = serviceHost.Description.Behaviors.Find<ServiceCredentials>();
+              
+              if (c != null)
+              {
+                serviceHost.Description.Behaviors
+                  .Remove<ServiceCredentials>();
+              }
+              
+              //serviceHost
+              //  .Credentials
+              //  .ServiceCertificate
+              //  .Certificate = CertificateHelper.GetCertificateFromBase64();
+
+              serviceHost.Description.Behaviors
+                .Add(CertificateHelper.GenerateCertificateEncryptedBehaviour());
             });
       });
     }

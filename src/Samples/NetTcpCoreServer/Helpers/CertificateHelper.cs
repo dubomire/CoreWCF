@@ -20,7 +20,15 @@ namespace NetTcpCoreServer.Helpers
     /// <summary>
     /// Takes base64 string and parses it as a certificate.
     /// </summary>
-    public static X509Certificate2 GetCertificateFromBase64(string base64)
+    public static X509Certificate2 GetCertificateFromBase64()
+    {
+      return GetCertificateFromBase64(cert);
+    }
+
+    /// <summary>
+      /// Takes base64 string and parses it as a certificate.
+      /// </summary>
+      public static X509Certificate2 GetCertificateFromBase64(string base64)
     {
       if (string.IsNullOrWhiteSpace(base64))
       {
